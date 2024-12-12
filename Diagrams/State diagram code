@@ -1,0 +1,53 @@
+@startuml
+[*] --> EntranceScanner
+
+state EntranceScanner {
+    [*] --> Scanning
+    Scanning --> EntryDetected : scanEntry()
+    EntryDetected --> SecuritySystem : Person Scanned
+}
+
+state SecuritySystem {
+    [*] --> VerifyIdentity
+    VerifyIdentity --> AllowEntry : allowEntry()
+    VerifyIdentity --> DenyEntry : denyEntry()
+    VerifyIdentity --> SuspiciousPersonTracker : Suspicious Detected
+}
+
+state SuspiciousPersonTracker {
+    [*] --> DetectSuspicious
+    DetectSuspicious --> AddToLog : detectSuspiciousActivity()
+    AddToLog --> NotificationSystem : Notify Alert
+}
+
+state NotificationSystem {
+    [*] --> SendAlert
+    SendAlert --> Admin : Notify Admin/Security
+}
+
+state Admin {
+    [*] --> ViewSuspiciousList
+    ViewSuspiciousList --> EditBlacklist : editBlacklist()
+    EditBlacklist --> AllowDenyEntry : allowEntry()/denyEntry()
+    AllowDenyEntry --> ViewLogs : viewLogs()
+    ViewLogs --> [*]
+}
+
+state Security {
+    [*] --> ViewSuspiciousList
+    ViewSuspiciousList --> RespondToAlert : respondToAlert()
+    RespondToAlert --> [*]
+}
+
+state Log {
+    [*] --> AddEntry
+    AddEntry --> [*]
+}
+
+EntranceScanner --> SecuritySystem : scanEntry()
+SecuritySystem --> SuspiciousPersonTracker : VerifyIdentity()
+SuspiciousPersonTracker --> NotificationSystem : NotifySuspiciousActivity()
+NotificationSystem --> Admin : SendAlert()
+NotificationSystem --> Security : SendAlert()
+Admin --> Log : Update Log
+@enduml
