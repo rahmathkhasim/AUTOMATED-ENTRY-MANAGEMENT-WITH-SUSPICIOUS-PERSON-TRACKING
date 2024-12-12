@@ -1,0 +1,78 @@
+@startuml
+
+' Define settings for the class diagram
+skinparam classBackgroundColor #DDDDFF
+skinparam shadowing false
+
+' Classes representing main components
+class EntranceScanner {
+  + scanEntry(): Person
+}
+
+class SecuritySystem {
+  + verifyIdentity(person: Person): boolean
+  + allowEntry(person: Person)
+  + denyEntry(person: Person)
+}
+
+class SuspiciousPersonTracker {
+  + detectSuspiciousActivity(person: Person): boolean
+  + addToLoglist(person: Person)
+  + getLoglist(): List<Person>
+}
+
+class NotificationSystem {
+  + sendAlert(person: Person, message: String)
+}
+
+class Admin {
+  + editBlacklist(person: Person)
+  + viewLogs(): List<Log>
+  +respondToAlert(person:Person)
+  +allowEntry():boolean
+  +denyEntry():boolean
+}
+
+class Security {
+  + viewSuspiciousPersons(): List<Person>
+  + respondToAlert(person: Person)
+}
+
+class User {
+  - id: String
+  - name: String
+  + requestAccess(): boolean
+  +allowEntry(): boolean
+  +denyEntry(): boolean
+}
+
+class Outsider {
+  - id: String
+  - name: String
+  + attemptEntry(): boolean
+}
+
+class Person {
+  - name: String
+  - id: String
+}
+
+class Log {
+  - timestamp: DateTime
+  - details: String
+  + addEntry(details: String)
+}
+
+' Relationships
+EntranceScanner --> SecuritySystem : "Scan Person" <<Association>>
+SecuritySystem --> SuspiciousPersonTracker : "Verify Suspicious" <<Association>>
+SuspiciousPersonTracker --> NotificationSystem : "Notify Suspicious Activity" <<Association>>
+NotificationSystem --> Security : "Send Alert" <<Association>>
+NotificationSystem --> Admin : "Send Alert" <<Association>>
+Admin --> SuspiciousPersonTracker : "Update Log" <<Aggregation>>
+Admin --> Log : "View/Edit" <<Aggregation>>
+Security --> SuspiciousPersonTracker : "View Suspicious List" <<Association>>
+User <|-- Person : "Inherits" <<Inheritance>>
+Outsider <|-- Person : "Inherits" <<Inheritance>>
+
+@enduml
