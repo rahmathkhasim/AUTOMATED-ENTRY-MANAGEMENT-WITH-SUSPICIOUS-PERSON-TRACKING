@@ -1,0 +1,17 @@
+@startuml
+package "System" {
+    rectangle "User Interface" as UI
+    rectangle "Authentication Service" as AuthService
+    rectangle "Visitor Management Service" as VisitorService
+    rectangle "Notification Service" as NotifyService
+    database "Database" as DB
+
+    UI --> AuthService : Login/Logout
+    AuthService --> VisitorService : User Session Validation
+    AuthService --> DB : Store/Retrieve User Credentials
+    VisitorService --> DB : Store/Retrieve Visitor Records
+    VisitorService --> NotifyService : Trigger Notifications
+    NotifyService --> DB : Access Notification Data
+    UI --> VisitorService : Visitor Info Management
+}
+@enduml
