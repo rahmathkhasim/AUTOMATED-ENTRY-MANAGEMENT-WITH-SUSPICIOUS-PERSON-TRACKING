@@ -10,7 +10,7 @@ package "System" {
     AuthService --> VisitorService : User Session Validation
     AuthService --> DB : Store/Retrieve User Credentials
     VisitorService --> DB : Store/Retrieve Visitor Records
-    VisitorService --> NotifyService : Trigger Notifications
+    UI --> NotifyService : Trigger Notifications
     NotifyService --> DB : Access Notification Data
     UI --> VisitorService : Visitor Info Management
 }
